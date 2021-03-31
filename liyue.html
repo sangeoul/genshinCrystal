@@ -1,0 +1,349 @@
+<style>
+    img{
+        position:absolute;
+    }
+    </style>
+    <head>
+        <title>마법 수정 위치 예측기</title>
+    </head>
+    <body id="body">
+    <input type=button onclick="goToMond();" value="▲몬드 지도 보기▲" style="width:600px;height:46px;position:absolute;font-size:28px;">
+    <img src="./liyue.jpg" height=800 style="top:56px;">
+    
+    
+    </body>
+    <script>
+    
+    const LEYLINEOUTCROP_SIZE="35px";
+    const CRYSTAL_W_SIZE="24px";
+    const CRYSTAL_B_SIZE="30px";
+
+    function goToMond(){
+        window.location.href="./mondstadt.html";
+    }
+    
+        class LLO{
+            constructor(x_,y_){
+                this.x=x_;
+                this.y=y_;
+                this.img_icon=document.createElement("img");
+                this.img_icon.src="./LeyLineOutcrop.png";
+                this.img_icon.style.left=x_;
+                this.img_icon.style.top=y_;
+                this.img_icon.style.width=LEYLINEOUTCROP_SIZE;
+                this.img_icon.style.height=LEYLINEOUTCROP_SIZE;
+                this.active=false;
+                //this.active=true;
+    
+                document.getElementById("body").appendChild(this.img_icon);
+    
+                this.img_icon.onclick=()=>{
+                    
+                    for(var i=0;i<LLOs.length;i++){
+                        LLOs[i].active=false;
+                        LLOs[i].display();
+                    }
+                    this.active=true;
+                    this.display();
+                    resetCrystals();
+                    calcCrystals();
+                    
+                };
+    
+                //alert("LLO " + x_ +" / " + y_ );
+            }
+    
+            display(){
+                if(this.active){
+                    this.img_icon.style.opacity="1.0";
+                }
+                else{
+                    
+                    this.img_icon.style.opacity="0.5";
+                }
+            }
+    
+    
+        }
+    
+        class Crystal{
+            constructor(x_,y_){
+                this.x=x_;
+                this.y=y_;
+                this.img_icon=document.createElement("img");
+                this.img_icon.style.width=CRYSTAL_W_SIZE;
+                this.img_icon.style.height=CRYSTAL_W_SIZE;
+                this.img_icon.src="./crystal_w.png";
+                this.img_icon.style.left=x_;
+                this.img_icon.style.top=y_;
+                document.getElementById("body").appendChild(this.img_icon);
+                this.probability=0.9;
+                this.fixed=false;
+    
+    
+                this.img_icon.onclick=()=>{
+                    var sum=0;
+
+                    if(this.probability<1.0){
+                        this.probability=1.0;
+                        this.fixed=true;
+                    }
+                    else{
+                        this.probability=0.0;
+                        this.fixed=true;
+                    }
+                    calcCrystals();
+
+    
+                }
+                
+            }
+            display(){
+                if(this.probability==1.0){
+                    
+                    this.img_icon.src="./crystal_b.png";
+                    this.img_icon.style.opacity="1.0";
+                    this.img_icon.style.width=CRYSTAL_B_SIZE;
+                    this.img_icon.style.height=CRYSTAL_B_SIZE;
+                }
+                else if(this.probability>0){
+                    
+                    this.img_icon.src="./crystal_w.png";
+                    this.img_icon.style.opacity="1.0";
+                    this.img_icon.style.width=CRYSTAL_W_SIZE;
+                    this.img_icon.style.height=CRYSTAL_W_SIZE;
+                }
+                else{
+                    this.img_icon.src="./crystal_w.png";
+                    this.img_icon.style.opacity="0.2";
+                    this.img_icon.style.width=CRYSTAL_W_SIZE;
+                    this.img_icon.style.height=CRYSTAL_W_SIZE;
+                }
+            }
+        }
+    
+        var LLOs=new Array();
+        var crystals=new Array();
+    
+        LLOs[0]=new LLO(280,79);//경책 산장
+        LLOs[1]=new LLO(490,123);//석문
+        LLOs[2]=new LLO(572,218);//대지의 소금
+        LLOs[3]=new LLO(527,370);//명온마을
+        LLOs[4]=new LLO(470,700);//고운각
+        LLOs[5]=new LLO(515,571);//리월항 북쪽
+        LLOs[6]=new LLO(270,650);//둔옥릉
+        LLOs[7]=new LLO(280,820);//리사교 남쪽
+        LLOs[8]=new LLO(160,115);//민림 북쪽
+        LLOs[9]=new LLO(205,360);//절운간
+        LLOs[10]=new LLO(85,425);//남천산
+        LLOs[11]=new LLO(30,470);//남천문
+    
+        crystals[0]=new Crystal(318,477);   //녹화연못
+        crystals[1]=new Crystal(315,640);   //둔옥릉 동쪽
+        crystals[2]=new Crystal(215,652);   // 둔옥릉 남쪽 동굴안
+        crystals[3]=new Crystal(194,658);   //둔옥릉 남쪽 언덕밑
+        crystals[4]=new Crystal(350,714);   //천형산(북)
+        crystals[5]=new Crystal(358,733);   //천형산(남)
+        crystals[6]=new Crystal(210,746);   //성법 관문 남쪽
+        crystals[7]=new Crystal(266,755);   //어둠으로 향하는 길 비경 
+        crystals[8]=new Crystal(295,794);   //리사교 사당 워프
+        crystals[9]=new Crystal(150,815);   // 청허포
+        crystals[10]=new Crystal(230,817);  //리사교 동굴
+        crystals[11]=new Crystal(495,720);   //고운각1
+        crystals[12]=new Crystal(525,776);   //고운각2
+        crystals[13]=new Crystal(508,800);   //고운각3
+        crystals[14]=new Crystal(525,823);  //고운각4
+        crystals[15]=new Crystal(260,235); //민림 미로 동쪽
+        crystals[16]=new Crystal(213,215); //민림 미로 워프
+        crystals[17]=new Crystal(44,242);  //오장산 동굴
+        crystals[18]=new Crystal(118,282);  //경운봉 북쪽1
+        crystals[19]=new Crystal(133,292);      //경운봉 북쪽2
+        crystals[20]=new Crystal(87,305);      //경운봉 능선1
+        crystals[21]=new Crystal(81,320);      //경운봉 능선2
+        crystals[22]=new Crystal(62,327);      //경운봉 능선3
+        crystals[23]=new Crystal(153,315);      //경운봉 동쪽1
+        crystals[24]=new Crystal(130,321);      //경운봉 동쪽2
+        crystals[25]=new Crystal(88,340);      //경운봉 능선4
+        crystals[26]=new Crystal(87,360);      //경운봉 능선5
+        crystals[27]=new Crystal(50,454);      //남천문
+        crystals[28]=new Crystal(200,490);      //천주 골짜기
+
+
+
+        function displayLLOs(){
+            for(var i=0;i<LLOs.length;i++){
+                LLOs[i].display();
+            }
+        }
+        function displayCrystals(){
+            for(var i=0;i<crystals.length;i++){
+                crystals[i].display();
+            }
+        }
+        function resetCrystals(){
+            for(var i=0;i<crystals.length;i++){
+                crystals[i].probability=0.9;
+                crystals[i].fixed=false;
+                crystals[i].img_icon.src="./crystal_w.png";
+                crystals[i].img_icon.style.width=CRYSTAL_W_SIZE;
+                crystals[i].img_icon.style.height=CRYSTAL_W_SIZE;
+            }
+            displayCrystals();
+        }
+    
+        function calcCrystals(exception_){
+
+
+            // 경책 산장            석문            대지의 소금         명온 마을           고운각
+            if(LLOs[0].active || LLOs[1].active || LLOs[2].active || LLOs[3].active || LLOs[4].active ){
+
+                crystals[0].probability=1.0;
+                crystals[4].probability=1.0;
+                crystals[5].probability=1.0;
+
+                for(var i=11;i<15;i++){
+                    crystals[i].probability=1.0;
+                }
+
+                for(var i=15;i<29;i++){
+                    crystals[i].probability=0.0;
+                }
+
+            }
+            //리월항 북쪽
+            else if(LLOs[5].active){
+                crystals[0].probability=1.0;
+                crystals[4].probability=1.0;
+                crystals[5].probability=1.0;
+                for(var i=11;i<15;i++){
+                    crystals[i].probability=0.0;
+                }
+
+                for(var i=15;i<29;i++){
+                    crystals[i].probability=0.0;
+                }
+            }
+
+            //          둔옥릉          리사교 남쪽
+            else if(LLOs[6].active || LLOs[7].active){
+                for(var i=11;i<27;i++){
+                    crystals[i].probability=0.0;
+                }
+
+                if(crystals[27].probability==1.0 && crystals[28].probability==1.0){
+                    crystals[0].probability=0.0;
+                    crystals[4].probability=0.0;
+                    crystals[5].probability=0.0;
+                }
+                else if((crystals[27].probability==1.0 && crystals[28].probability==0.0) || (crystals[27].probability==0.0 && crystals[28].probability==1.0)){
+                    crystals[0].probability=1.0;
+                    crystals[4].probability=0.0;
+                    crystals[5].probability=0.0; 
+                }
+                else if((crystals[27].probability==0.0 && crystals[28].probability==0.0) || crystals[4].probability==1.0 || crystals[5].probability==1.0){
+                    crystals[0].probability=1.0;
+                    crystals[4].probability=1.0;
+                    crystals[5].probability=1.0;
+                    crystals[27].probability=0.0;
+                    crystals[28].probability=0.0;
+                }
+
+            }
+            //      민림 북쪽           //절운간
+            else if(LLOs[8].active || LLOs[9].active){
+                crystals[0].probability=1.0;
+                crystals[4].probability=1.0;
+                crystals[5].probability=1.0;
+                for(var i=11;i<15;i++){
+                    crystals[i].probability=1.0;
+                }
+
+                crystals[15].probability=1.0;
+
+                for(var i=16;i<29;i++){
+                    crystals[i].probability=0.0;
+                }                
+            }
+            //남천산
+            else if(LLOs[10].active){
+                for(var i=0;i<16;i++){
+                    crystals[i].probability=0;
+                }
+                crystals[27].probability=0;
+                crystals[28].probability=0;
+            }
+
+            //남천문
+            else if(LLOs[11].active){
+                for(var i=0;i<16;i++){
+                    crystals[i].probability=0;
+                }
+                crystals[27].probability=1.0;
+                crystals[28].probability=1.0;   
+            }
+    
+
+            //천형산 수정 세트
+            if(crystals[4].probability==1.0 && !crystals[5].fixed){
+                crystals[5].probability=1.0;
+            }
+            else if(crystals[4].probability==0.0 && !crystals[5].fixed){
+                crystals[5].probability=0.0;
+            }
+            if(crystals[5].probability==1.0 && !crystals[4].fixed){
+                crystals[4].probability=1.0;
+            }
+            else if(crystals[5].probability==0.0 && !crystals[4].fixed){
+                crystals[4].probability=0.0;
+            }
+
+
+            //고운각 수정 세트
+            for(var j=11;j<15;j++){
+                if(!crystals[j].fixed){
+                    for(var i=11;i<15;i++){
+                        if(crystals[i].probability==1.0){
+                            crystals[j].probability=1.0;
+                        }
+                    }
+                }
+            }
+
+    
+    
+    
+    
+    
+    
+            var sum=0,prsum=0;
+            for(var i=0;i<crystals.length;i++){
+                if(crystals[i].probability==1.0){
+                    sum++;
+                }
+                if(crystals[i].probability>0){
+                    prsum++;
+                }
+            }
+            if(sum>=10){
+                for(var i=0;i<crystals.length;i++){
+                    if(crystals[i].probability<1.0){
+                        crystals[i].probability=0.0;
+                    }
+                }            
+            }
+
+            if(prsum==10){
+                for(var i=0;i<crystals.length;i++){
+                    if(crystals[i].probability>0){
+                        crystals[i].probability=1.0;
+                    }
+                }             
+            }
+   
+    
+            displayCrystals();
+        }
+    
+        displayLLOs();
+        displayCrystals();
+    </script>

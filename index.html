@@ -1,0 +1,54 @@
+<style>
+img{
+    position:absolute;
+}
+</style>
+
+<img src="./mondstadt.jpg">
+
+
+
+<script>
+
+    class LLO{
+        constructor(x_,y_){
+            this.x=x_;
+            this.y=y_;
+            this.img_icon=document.createElement("img");
+            this.img_icon.src="./LeyLineOutcrop.png";
+            this.img_icon.style.left=x_;
+            this.img_icon.style.top=y_;
+            //this.active=false;
+            this.active=true;
+        }
+
+        display(){
+            if(this.active){
+                this.img_icon.style.opacity="1.0";
+            }
+            else{
+                this.img_icon.style.opacity="0.3";
+            }
+        }
+
+    }
+    class Crystal{
+        constructor(x_,y_){
+            this.x=x_;
+            this.y=y_;
+            this.img_icon=document.createElement("img");
+            this.img_icon.src="./LeyLineOutcrop.png";
+            this.img_icon.style.left=x_;
+            this.img_icon.style.top=y_;
+        }
+    }
+
+    var mLLOs=new Array();
+    var lLLOs=new Array();
+
+    mLLOs[0]=new Crystal();
+
+    function DisplayLLO(){
+        for var i=0;i<
+    }
+</script>
