@@ -46,6 +46,7 @@
                     this.active=true;
                     this.display();
                     resetCrystals();
+                    
                     calcCrystals();
                     
                 };
@@ -80,10 +81,11 @@
                 this.probability=0.9;
                 this.fixed=false;
     
-    
+                
                 this.img_icon.onclick=()=>{
+                    
                     var sum=0;
-
+                    
                     if(this.probability<1.0){
                         this.probability=1.0;
                         this.fixed=true;
@@ -92,7 +94,9 @@
                         this.probability=0.0;
                         this.fixed=true;
                     }
+                    
                     calcCrystals();
+                    
 
     
                 }
@@ -193,7 +197,7 @@
     
         function calcCrystals(exception_){
 
-
+            
             // 경책 산장            석문            대지의 소금         명온 마을           고운각
             if(LLOs[0].active || LLOs[1].active || LLOs[2].active || LLOs[3].active || LLOs[4].active ){
 
@@ -226,6 +230,7 @@
 
             //          둔옥릉          리사교 남쪽
             else if(LLOs[6].active || LLOs[7].active){
+                
                 for(var i=11;i<27;i++){
                     crystals[i].probability=0.0;
                 }
@@ -242,7 +247,7 @@
                 }
                 else if((crystals[27].probability==0.0 && crystals[28].probability==0.0) || crystals[4].probability==1.0 || crystals[5].probability==1.0){
                     
-                    for(var i=1;i<10;i++){
+                    for(var i=1;i<11;i++){
                         crystals[i].probability=0.9;
                     }
                     crystals[0].probability=1.0;
@@ -253,6 +258,7 @@
                 }
 
             }
+            
             //      민림 북쪽           //절운간
             else if(LLOs[8].active || LLOs[9].active){
                 crystals[0].probability=1.0;
@@ -300,7 +306,7 @@
             else if(crystals[5].probability==0.0 && !crystals[4].fixed){
                 crystals[4].probability=0.0;
             }
-
+            
 
             //고운각 수정 세트
             for(var j=11;j<15;j++){
@@ -343,6 +349,7 @@
                     }
                 }             
             }
+            
    
     
             displayCrystals();
