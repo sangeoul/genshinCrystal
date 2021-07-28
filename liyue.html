@@ -9,6 +9,7 @@
     <body id="body">
     <input type=button onclick="goToMond();" value="▲몬드 지도 보기▲" style="width:600px;height:46px;position:absolute;font-size:28px;">
     <img src="./liyue.jpg" height=800 style="top:56px;">
+    <input type=button onclick="goToInazuma();" value="▼이나즈마 지도 보기▼" style="width:600px;height:46px;position:absolute;font-size:28px;top:858px">
     
     
     </body>
@@ -20,6 +21,9 @@
 
     function goToMond(){
         window.location.href="./mondstadt.html";
+    }
+    function goToInazuma(){
+        window.location.href="./inazuma.html";
     }
     
         class LLO{
@@ -85,6 +89,7 @@
                 this.img_icon.onclick=()=>{
                     
                     var sum=0;
+                    alert(this.probability);
                     
                     if(this.probability<1.0){
                         this.probability=1.0;
@@ -248,8 +253,9 @@
                 else if((crystals[27].probability==0.0 && crystals[28].probability==0.0) || crystals[4].probability==1.0 || crystals[5].probability==1.0){
                     
                     for(var i=1;i<11;i++){
+                        
                         crystals[i].probability=0.9;
-                        crystals[i].fixed=false;
+                        
                     }
                     crystals[0].probability=1.0;
                     crystals[4].probability=1.0;

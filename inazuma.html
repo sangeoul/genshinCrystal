@@ -1,0 +1,341 @@
+<style>
+    img{
+        position:absolute;
+    }
+    </style>
+    <head>
+        <title>마법 수정 위치 예측기</title>
+    </head>
+    <body id="body">
+        <input type=button onclick="goToLiyue();" value="▲리월 지도 보기▲" style="width:800px;height:46px;position:absolute;font-size:28px;top:2px">
+    <img src="./inazuma.jpg" style="top:56px;">
+
+    
+    </body>
+    <script>
+    
+    const LEYLINEOUTCROP_SIZE="30px";
+    const CRYSTAL_W_SIZE="24px";
+    const CRYSTAL_B_SIZE="30px";
+
+    function goToLiyue(){
+        window.location.href="./liyue.html";
+    }
+    
+        class LLO{
+            constructor(x_,y_){
+                this.x=x_;
+                this.y=y_;
+                this.img_icon=document.createElement("img");
+                this.img_icon.src="./LeyLineOutcrop.png";
+                this.img_icon.style.left=x_;
+                this.img_icon.style.top=y_;
+                this.img_icon.style.width=LEYLINEOUTCROP_SIZE;
+                this.img_icon.style.height=LEYLINEOUTCROP_SIZE;
+                this.active=false;
+                //this.active=true;
+    
+                document.getElementById("body").appendChild(this.img_icon);
+    
+                this.img_icon.onclick=()=>{
+                    
+                    for(var i=0;i<LLOs.length;i++){
+                        LLOs[i].active=false;
+                        LLOs[i].display();
+                    }
+                    this.active=true;
+                    this.display();
+                    resetCrystals();
+                    
+                    calcCrystals();
+                    
+                };
+    
+                //alert("LLO " + x_ +" / " + y_ );
+            }
+    
+            display(){
+                if(this.active){
+                    this.img_icon.style.opacity="1.0";
+                }
+                else{
+                    
+                    this.img_icon.style.opacity="0.5";
+                }
+            }
+    
+    
+        }
+        class LLOE{
+            constructor(x_,y_){
+                this.x=x_;
+                this.y=y_;
+                this.img_icon=document.createElement("img");
+                this.img_icon.src="./LeyLineOutcropEXP.png";
+                this.img_icon.style.left=x_;
+                this.img_icon.style.top=y_;
+                this.img_icon.style.width=LEYLINEOUTCROP_SIZE;
+                this.img_icon.style.height=LEYLINEOUTCROP_SIZE;
+                this.active=false;
+                //this.active=true;
+    
+                document.getElementById("body").appendChild(this.img_icon);
+    
+                this.img_icon.onclick=()=>{
+                    
+                    for(var i=0;i<LLOEs.length;i++){
+                        LLOEs[i].active=false;
+                        LLOEs[i].display();
+                    }
+                    this.active=true;
+                    this.display();
+                    resetCrystals();
+                    
+                    calcCrystals();
+                    
+                };
+    
+                //alert("LLO " + x_ +" / " + y_ );
+            }
+    
+            display(){
+                if(this.active){
+                    this.img_icon.style.opacity="1.0";
+                }
+                else{
+                    
+                    this.img_icon.style.opacity="0.5";
+                }
+            }
+    
+    
+        }
+    
+        class Crystal{
+            constructor(x_,y_){
+                this.x=x_;
+                this.y=y_;
+                this.img_icon=document.createElement("img");
+                this.img_icon.style.width=CRYSTAL_W_SIZE;
+                this.img_icon.style.height=CRYSTAL_W_SIZE;
+                this.img_icon.src="./crystal_w.png";
+                this.img_icon.style.left=x_;
+                this.img_icon.style.top=y_;
+                document.getElementById("body").appendChild(this.img_icon);
+                this.probability=0.9;
+                this.fixed=false;
+    
+                
+                this.img_icon.onclick=()=>{
+                    
+                    var sum=0;
+                    alert(this.probability);
+                    
+                    if(this.probability<1.0){
+                        this.probability=1.0;
+                        this.fixed=true;
+                    }
+                    else{
+                        this.probability=0.0;
+                        this.fixed=true;
+                    }
+                    
+                    calcCrystals();
+                    
+
+    
+                }
+                
+            }
+            display(){
+                if(this.probability==1.0){
+                    
+                    this.img_icon.src="./crystal_b.png";
+                    this.img_icon.style.opacity="1.0";
+                    this.img_icon.style.width=CRYSTAL_B_SIZE;
+                    this.img_icon.style.height=CRYSTAL_B_SIZE;
+                }
+                else if(this.probability>0){
+                    
+                    this.img_icon.src="./crystal_w.png";
+                    this.img_icon.style.opacity="1.0";
+                    this.img_icon.style.width=CRYSTAL_W_SIZE;
+                    this.img_icon.style.height=CRYSTAL_W_SIZE;
+                }
+                else{
+                    this.img_icon.src="./crystal_w.png";
+                    this.img_icon.style.opacity="0.2";
+                    this.img_icon.style.width=CRYSTAL_W_SIZE;
+                    this.img_icon.style.height=CRYSTAL_W_SIZE;
+                }
+            }
+        }
+    
+        var LLOs=new Array();
+        var LLOEs=new Array();
+        var crystals=new Array();
+    
+        LLOs[0]=new LLO(700,63);//황해
+        LLOs[1]=new LLO(320,150);//타타라스나
+        LLOs[2]=new LLO(93,310);//야시오리
+
+        LLOEs[0]=new LLOE(700,93);//황해
+        LLOEs[1]=new LLOE(320,180);//타타라스나
+        LLOEs[2]=new LLOE(93,340);//야시오리
+
+
+        crystals[0]=new Crystal(660,100);   //황해
+        crystals[1]=new Crystal(790,140);   //카미사토 저택 북쪽
+        crystals[2]=new Crystal(732,190);   //요고우산 협곡
+        crystals[3]=new Crystal(780,207);   //카미사토 저택 남쪽
+        crystals[4]=new Crystal(707,220);   //진수의 숲 서쪽
+        crystals[5]=new Crystal(675,280);   //백여우 들판
+        
+        crystals[6]=new Crystal(460,110);   //쿠죠 병영
+        crystals[7]=new Crystal(535,120);   //쿠죠 병영 동쪽
+        crystals[8]=new Crystal(360,151);   //타타라스나 북단
+        crystals[9]=new Crystal(450,160);   //쿠죠 병영 남쪽
+        crystals[10]=new Crystal(385,290);   //타타라스나 남쪽 언덕
+        crystals[11]=new Crystal(430,300);   //타타라스나 남쪽 섬
+
+        crystals[12]=new Crystal(250,175);   //나즈치 해안
+        crystals[13]=new Crystal(135,215);   //무상도의 협곡 동쪽
+        crystals[14]=new Crystal(50,245);   //히기 마을
+        crystals[15]=new Crystal(105,245);   //뱀신의 머리
+        crystals[16]=new Crystal(80,330);   //뼈 광갱 서쪽
+        crystals[17]=new Crystal(180,325);   //뼈 광갱 동쪽
+
+
+
+
+        function displayLLOs(){
+            for(var i=0;i<LLOs.length;i++){
+                LLOs[i].display();
+            }
+            for(var i=0;i<LLOEs.length;i++){
+                LLOEs[i].display();
+            }
+        }
+        function displayCrystals(){
+            for(var i=0;i<crystals.length;i++){
+                crystals[i].display();
+            }
+        }
+        function resetCrystals(){
+            for(var i=0;i<crystals.length;i++){
+                crystals[i].probability=0.9;
+                crystals[i].fixed=false;
+                crystals[i].img_icon.src="./crystal_w.png";
+                crystals[i].img_icon.style.width=CRYSTAL_W_SIZE;
+                crystals[i].img_icon.style.height=CRYSTAL_W_SIZE;
+            }
+            displayCrystals();
+        }
+    
+        function calcCrystals(exception_){
+
+            
+            // 황해  
+            if(LLOs[0].active ){
+
+                for(var i=0;i<6;i++){
+                    crystals[i].probability=1.0;
+                }
+
+                if(LLOEs[1].active){
+
+                    for(var i=12;i<18;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[2].active){
+
+                    for(var i=6;i<12;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+
+            }
+            //타타라스나
+            else if(LLOs[1].active){
+                for(var i=6;i<12;i++){
+                    crystals[i].probability=1.0;
+                }
+
+                if(LLOEs[0].active){
+
+                    for(var i=12;i<18;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[2].active){
+
+                    for(var i=0;i<6;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+
+            }
+
+            //야시오리
+            else if(LLOs[2].active){
+                for(var i=12;i<18;i++){
+                    crystals[i].probability=1.0;
+                }
+
+                if(LLOEs[0].active){
+
+                for(var i=6;i<12;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[1].active){
+
+                    for(var i=0;i<6;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+
+
+            }
+
+
+    
+    
+    
+    
+    
+    
+            var sum=0,prsum=0;
+            for(var i=0;i<crystals.length;i++){
+                if(crystals[i].probability==1.0){
+                    sum++;
+                }
+                if(crystals[i].probability>0){
+                    prsum++;
+                }
+            }
+            if(sum>=8){
+                for(var i=0;i<crystals.length;i++){
+                    if(crystals[i].probability<1.0){
+                        crystals[i].probability=0.0;
+                    }
+                }            
+            }
+
+            if(prsum==8){
+                for(var i=0;i<crystals.length;i++){
+                    if(crystals[i].probability>0){
+                        crystals[i].probability=1.0;
+                    }
+                }             
+            }
+            
+   
+    
+            displayCrystals();
+        }
+    
+        displayLLOs();
+        displayCrystals();
+    </script>
