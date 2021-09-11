@@ -271,7 +271,9 @@
                 crystals[4].probability=1.0;
                 crystals[5].probability=1.0;
                 for(var i=11;i<15;i++){
-                    crystals[i].probability=1.0;
+                    if(crystals[i].fixed==false){
+                        crystals[i].probability=1.0;
+                    }
                 }
 
                 crystals[15].probability=1.0;
