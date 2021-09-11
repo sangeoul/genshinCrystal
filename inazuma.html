@@ -22,6 +22,7 @@
         window.location.href="./liyue.html";
     }
     
+        //모라지맥
         class LLO{
             constructor(x_,y_){
                 this.x=x_;
@@ -66,6 +67,9 @@
     
     
         }
+
+
+        //경험치지맥
         class LLOE{
             constructor(x_,y_){
                 this.x=x_;
@@ -177,10 +181,14 @@
         LLOs[0]=new LLO(700,63);//황해
         LLOs[1]=new LLO(320,150);//타타라스나
         LLOs[2]=new LLO(93,310);//야시오리
+        LLOs[3]=new LLO(277,545)//와타츠미
+        LLOs[4]=new LLO(556,438)//세이라이
 
         LLOEs[0]=new LLOE(700,93);//황해
         LLOEs[1]=new LLOE(320,180);//타타라스나
         LLOEs[2]=new LLOE(93,340);//야시오리
+        LLOEs[3]=new LLOE(277,575)//와타츠미
+        LLOEs[4]=new LLOE(556,468)//세이라이
 
 
         crystals[0]=new Crystal(660,100);   //황해
@@ -204,7 +212,20 @@
         crystals[16]=new Crystal(80,330);   //뼈 광갱 서쪽
         crystals[17]=new Crystal(180,325);   //뼈 광갱 동쪽
 
+        crystals[18]=new Crystal(230,460);   //무상의 물
+        crystals[19]=new Crystal(146,475);   //산호궁 북서쪽
+        crystals[20]=new Crystal(140,530);   //모운 신사
+        crystals[21]=new Crystal(307,537);   //동쪽 작은섬
+        crystals[22]=new Crystal(263,555);   //보우로우 마을 동쪽 워프
+        crystals[23]=new Crystal(200,598);   //보우로우 마을 남쪽 해안
+        crystals[24]=new Crystal(143,590);   //보우로우 마을 서쪽 해안
 
+        crystals[25]=new Crystal(545,448);   //코세키 마을 북쪽
+        crystals[26]=new Crystal(543,467);   //코세키 마을 지하1
+        crystals[27]=new Crystal(532,477);   //코세키 마을 지하2
+        crystals[28]=new Crystal(625,465);   //코세키 마을 동쪽 워프
+        crystals[29]=new Crystal(675,440);   //히라우미 요새
+        crystals[30]=new Crystal(680,638);   //아마쿠모 남쪽섬
 
 
         function displayLLOs(){
@@ -234,6 +255,48 @@
         function calcCrystals(exception_){
 
             
+            if(LLOs[0].active || LLOs[1].active || LLOs[2].active || LLOs[3].active || LLOs[4].active){
+                if(LLOEs[0].active){
+                    for(var i=6;i<31;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+
+                else if(LLOEs[1].active){
+
+                    for(var i=0;i<6;i++){
+                        crystals[i].probability=0;
+                    }
+                    for(var i=12;i<31;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[2].active){
+
+                    for(var i=0;i<12;i++){
+                        crystals[i].probability=0;
+                    }
+                    for(var i=18;i<25;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[3].active){
+
+                    for(var i=0;i<18;i++){
+                        crystals[i].probability=0;
+                    }
+                    for(var i=25;i<31;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+                else if(LLOEs[4].active){
+
+                    for(var i=0;i<25;i++){
+                        crystals[i].probability=0;
+                    }
+                }
+            }
+
             // 황해  
             if(LLOs[0].active ){
 
@@ -241,37 +304,11 @@
                     crystals[i].probability=1.0;
                 }
 
-                if(LLOEs[1].active){
-
-                    for(var i=12;i<18;i++){
-                        crystals[i].probability=0;
-                    }
-                }
-                else if(LLOEs[2].active){
-
-                    for(var i=6;i<12;i++){
-                        crystals[i].probability=0;
-                    }
-                }
-
             }
             //타타라스나
             else if(LLOs[1].active){
                 for(var i=6;i<12;i++){
                     crystals[i].probability=1.0;
-                }
-
-                if(LLOEs[0].active){
-
-                    for(var i=12;i<18;i++){
-                        crystals[i].probability=0;
-                    }
-                }
-                else if(LLOEs[2].active){
-
-                    for(var i=0;i<6;i++){
-                        crystals[i].probability=0;
-                    }
                 }
 
             }
@@ -282,19 +319,22 @@
                     crystals[i].probability=1.0;
                 }
 
-                if(LLOEs[0].active){
+            }
 
-                for(var i=6;i<12;i++){
-                        crystals[i].probability=0;
-                    }
-                }
-                else if(LLOEs[1].active){
+            //와타츠미
 
-                    for(var i=0;i<6;i++){
-                        crystals[i].probability=0;
-                    }
+            else if(LLOs[3].active){
+                for(var i=18;i<25;i++){
+                    crystals[i].probability=1.0;
                 }
 
+            }
+
+            //세이라이
+            else if(LLOs[4].active){
+                for(var i=25;i<31;i++){
+                    crystals[i].probability=1.0;
+                }
 
             }
 
